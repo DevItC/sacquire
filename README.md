@@ -1,2 +1,2 @@
 # FB-Downloader
-Downloads facebooks videos and photos
+App for Downloading Facebook videos and images
