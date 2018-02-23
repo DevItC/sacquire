@@ -1,9 +1,13 @@
+import os
 import requests
 from selenium import webdriver
 
 
 
 def download(url):
+    if not os.path.isdir("images"):
+        os.makedirs("images")
+
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
     driver = webdriver.Chrome(chrome_options=options)
@@ -17,10 +21,11 @@ def download(url):
     res = requests.get(image_link)
     res.raise_for_status()
     title = image_link.split("?")[0].split("/")[-1]
-    image_file = open(title, "wb")
-    for chunk in res.iter_content(100000):
-        image_file.write(chunk)
-    image_file.close()
+    
+    with open(os.path.join("images", title), "wb") as image:
+        for chunk in res.iter_content(100000):
+            image.write(chunk)
+    
     return title
 
 
@@ -31,4 +36,4 @@ def main():
 
 
 if __name__=="__main__":
-	main()
+    main()
