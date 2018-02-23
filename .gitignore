@@ -100,5 +100,6 @@ ENV/
 # mypy
 .mypy_cache/
 
-# downloaded images
+# downloaded files
 images/
+videos/

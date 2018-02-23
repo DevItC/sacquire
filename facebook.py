@@ -37,7 +37,7 @@ def download(url):
 
 
 def main():
-    url = input("[*] Enter image URL: ")
+    url = input("[*] Enter file URL: ")
     filename = download(url)
     print("[*] File saved as {}".format(filename))
 
