@@ -3,6 +3,8 @@ import requests
 import json
 from selenium import webdriver
 
+
+
 def download(url):
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
@@ -13,27 +15,25 @@ def download(url):
     try:
         elem = driver.find_element_by_xpath("//div[@class='widePic']/div").get_attribute("data-store")
         link = json.loads(elem)["src"]
-        type = "videos"
+        dirname = "videos"
     except:
         elem = driver.find_elements_by_class_name("sec")
         link = elem[1].get_attribute("href")
-        type = "images"
-        pass
+        dirname = "images"
     driver.close()
 
     res = requests.get(link)
     res.raise_for_status()
     title = link.split("?")[0].split("/")[-1]
     
-    if not os.path.isdir(type):
-        os.makedirs(type)
+    if not os.path.isdir(dirname):
+        os.makedirs(dirname)
         
-    with open(os.path.join(type, title), "wb") as file:
+    with open(os.path.join(dirname, title), "wb") as file:
         for chunk in res.iter_content(100000):
             file.write(chunk)
 
     return title
-
 
 
 def main():
