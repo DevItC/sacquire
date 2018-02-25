@@ -1,4 +1,4 @@
-from facebook import download
+import facebook
 from rq import Queue
 from rq.job import Job
 from worker import conn
@@ -18,7 +18,7 @@ def index():
 @app.route('/enqueue', methods=['POST'])
 def enqueue():
     args = (request.form['URL'],)
-    task = q.enqueue_call(func=download, args=args, result_ttl=5000, timeout=3600)
+    task = q.enqueue_call(func=facebook.download, args=args, result_ttl=5000, timeout=3600)
     
     response = {
         'status': 'success',

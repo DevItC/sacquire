@@ -7,10 +7,8 @@ $(document).ready(() => {
 $('form').submit(function(event) {
   var formdata = $(this).serializeObject();
   console.log(formdata);
-  event.preventDefault();
-  
-  $("#loading").toggleClass("invisible");
-  $("#submitBtn").toggleClass("invisible");
+  event.preventDefault();  
+  $('#button').attr('data-loading', '');
 
   $.ajax(
     {
@@ -38,8 +36,7 @@ function getStatus(taskID) {
 
     if (taskStatus === 'finished' || taskStatus === 'failed') {
       window.location.assign(`/download/${taskID}`);
-      $("#loading").toggleClass("invisible");
-      $("#submitBtn").toggleClass("invisible");
+      $('#button').removeAttr('data-loading');
       return false;
     }
     setTimeout(function() {

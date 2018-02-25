@@ -6,6 +6,7 @@ from selenium import webdriver
 
 
 def download(url):
+    print(os.environ['PATH'])
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
     driver = webdriver.Chrome(chrome_options=options)
