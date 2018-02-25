@@ -4,11 +4,12 @@ $(document).ready(() => {
   console.log('Sanity Check!');
 });
 
+var l = Ladda.create( document.querySelector( 'button' ) );
+
 $('form').submit(function(event) {
   var formdata = $(this).serializeObject();
-  console.log(formdata);
-  event.preventDefault();  
-  $('#button').attr('data-loading', '');
+  event.preventDefault();
+  l.start();
 
   $.ajax(
     {
@@ -36,7 +37,7 @@ function getStatus(taskID) {
 
     if (taskStatus === 'finished' || taskStatus === 'failed') {
       window.location.assign(`/download/${taskID}`);
-      $('#button').removeAttr('data-loading');
+      l.stop();
       return false;
     }
     setTimeout(function() {
