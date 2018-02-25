@@ -5,22 +5,22 @@ App for Downloading Facebook videos and images
 
 1. Install Google Chrome for Ubuntu:
 
-	'''console
+	```console
 	$ sudo apt-get install libxss1 libappindicator1 libindicator7
 	$ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 	$ sudo dpkg -i google-chrome*.deb
 	$ sudo apt-get install -f
-	'''
+	```
 
 2. Install xvfb to run chrome headlessly:
 
-	'''console
+	```console
 	$ sudo apt-get install xvfb
-	...
+	```
 
 3. Install chrome driver and add it to path:
 
-	'''console
+	```console
 	$ sudo apt-get install unzip
 	$ wget -N http://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip
 	$ unzip chromedriver_linux64.zip
@@ -32,9 +32,9 @@ App for Downloading Facebook videos and images
 
     ```
 5. Add/Replace the below code in your 
-	'features/support/env.rb'
+	`features/support/env.rb`
 
-	'''ruby
+	```ruby
 	Capybara.register_driver :chrome do |app|
 	  # optional
 	  client = Selenium::WebDriver::Remote::Http::Default.new
@@ -43,7 +43,7 @@ App for Downloading Facebook videos and images
 	  Capybara::Selenium::Driver.new(app, :browser => :chrome, :http_client => client)
 	end
 	Capybara.javascript_driver = :chrome
-	'''
+	```
 
 4. Start a worker process
     
