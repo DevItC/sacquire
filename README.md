@@ -31,7 +31,19 @@ App for Downloading Facebook videos and images
 	$ sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
 
     ```
+5. Add/Replace the below code in your 
+	'features/support/env.rb'
 
+	'''ruby
+	Capybara.register_driver :chrome do |app|
+	  # optional
+	  client = Selenium::WebDriver::Remote::Http::Default.new
+	  # optional
+	  client.timeout = 120
+	  Capybara::Selenium::Driver.new(app, :browser => :chrome, :http_client => client)
+	end
+	Capybara.javascript_driver = :chrome
+	'''
 
 4. Start a worker process
     
