@@ -1,3 +1,3 @@
-flask
-rq
 selenium
+rq
+flask
