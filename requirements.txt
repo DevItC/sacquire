@@ -2,3 +2,4 @@ selenium
 rq
 flask
 gunicorn
+requests

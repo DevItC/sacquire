@@ -1,7 +1,7 @@
 # FB-Downloader
 App for Downloading Facebook videos and images
 
-## Running the app 
+## Running the app
 
 1. Install Google Chrome for Ubuntu:
 
