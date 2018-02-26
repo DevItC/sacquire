@@ -22,7 +22,7 @@ App for Downloading Facebook videos and images
 
 	```console
 	$ sudo apt-get install unzip
-	$ wget -N http://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip
+	$ wget -N http://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip
 	$ unzip chromedriver_linux64.zip
 	$ chmod +x chromedriver
 
