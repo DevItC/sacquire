@@ -3,55 +3,46 @@ App for Downloading Facebook videos and images
 
 ## Running the app
 
-1. Install Google Chrome for Ubuntu:
+1. Install Google Chrome for Ubuntu
 
 	```console
-	$ sudo apt-get install libxss1 libappindicator1 libindicator7
-	$ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-	$ sudo dpkg -i google-chrome*.deb
-	$ sudo apt-get install -f
+	$ wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+	$ echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+	$ sudo apt-get update
+	$ sudo apt-get install google-chrome-stable
 	```
 
-2. Install xvfb to run chrome headlessly:
+2. Install xvfb to run Chrome headlessly
 
 	```console
 	$ sudo apt-get install xvfb
 	```
 
-3. Install chrome driver and add it to path:
+3. Download chromedriver and add it to path
 
 	```console
 	$ sudo apt-get install unzip
 	$ wget -N http://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip
 	$ unzip chromedriver_linux64.zip
 	$ chmod +x chromedriver
-
 	$ sudo mv -f chromedriver /usr/local/share/chromedriver
 	$ sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
 	$ sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
-
     ```
-5. Add/Replace the below code in your 
-	`features/support/env.rb`
 
-	```ruby
-	Capybara.register_driver :chrome do |app|
-	  # optional
-	  client = Selenium::WebDriver::Remote::Http::Default.new
-	  # optional
-	  client.timeout = 120
-	  Capybara::Selenium::Driver.new(app, :browser => :chrome, :http_client => client)
-	end
-	Capybara.javascript_driver = :chrome
-	```
+4. Install Redis server
 
-4. Start a worker process
+```console
+$ sudo apt-get install redis-server
+```
+
+5. Start a worker process
     
     ```console
     $ python3 worker.py
     ```
 
-5. Start the `Flask` server
+6. Start the `Flask` server
     
     ```console
     $ export FLASK_APP=app.py
