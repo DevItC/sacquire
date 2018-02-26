@@ -59,3 +59,17 @@ App for Downloading Facebook videos and images
     ```
 
 __NOTE__: This two processes must run concurrently. I suggest that for now run these two in two different consoles.
+
+
+## Deploying on Heroku
+
+```console
+$ heroku create
+$ heroku config:add GOOGLE_CHROME_CHANNEL=stable
+$ heroku buildpacks:set heroku/python
+$ heroku buildpacks:add https://github.com/heroku/heroku-buildpack-google-chrome.git
+$ heroku buildpacks:add https://github.com/heroku/heroku-buildpack-chromedriver.git
+$ git push heroku master
+$ heroku addons:create redistogo:nano
+$ heroku ps:scale worker=1
+```
