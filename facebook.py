@@ -8,6 +8,7 @@ from selenium import webdriver
 def download(url):
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
+    options.add_argument('--no-sandbox')
     driver = webdriver.Chrome(chrome_options=options)
 
     url = "m".join(url.split("www"))
