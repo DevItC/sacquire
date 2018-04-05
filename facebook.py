@@ -51,7 +51,10 @@ def get_preview(driver):
 		url_type = "video"
 	except:
 		url_type = "image"
-		elem = driver.find_elements_by_xpath("//div[@id='page']//i")[2].get_attribute('style')
+		elements = driver.find_elements_by_xpath("//div[@id='page']//i")
+		if (len(elements)==0):
+			return ['private', None]
+		elem=elements[2].get_attribute('style')
 
 	# print (elem)
 	# print ()
@@ -63,6 +66,8 @@ def open_link(url):
 	options.add_argument("headless")
 	options.add_argument('--no-sandbox')
 	driver = webdriver.Chrome()
+	url = "m".join(url.split("www"))
+	driver.get(url)
 	return driver
 	
 
@@ -70,15 +75,12 @@ def open_link(url):
 def main():
     url = input("[*] Enter file URL: ")
     driver = open_link(url)
-    url = "m".join(url.split("www"))
-    driver.get(url)
-
+    
     preview = get_preview(driver)
     print (preview)
-    link = get_link(driver)
+    link = download(driver)
     # print("[*] File saved as {}".format(filename))
     print (link)
-
 
 
 if __name__ == "__main__":
