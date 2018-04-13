@@ -15,7 +15,7 @@ def get_link(driver):
 		link = elem[1].get_attribute("href")
 		# driver.get(link)
 	dirname = "images"
-	# driver.close()
+	driver.close()
 	title = link.split("?")[0].split("/")[-1]
 	return [title, link]
 
@@ -61,6 +61,7 @@ def get_preview(driver):
 	url = elem.split("\"")[1]
 	return [url_type, url]
 
+
 def open_link(url):
 	options = webdriver.ChromeOptions()
 	options.add_argument("headless")
@@ -70,7 +71,11 @@ def open_link(url):
 	driver.get(url)
 	return driver
 	
-
+def give_links(url):
+	driver = open_link(url)
+	preview = get_preview(driver)
+	link = get_link(driver)
+	return [preview, link]
 
 def main():
     url = input("[*] Enter file URL: ")
@@ -78,7 +83,8 @@ def main():
     
     preview = get_preview(driver)
     print (preview)
-    link = download(driver)
+    link = get_link(driver)
+    print (link)
     # print("[*] File saved as {}".format(filename))
     print (link)
 
