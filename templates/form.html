@@ -7,12 +7,13 @@
             <h4>App for Downloading Facebook videos and images</h4>
               <input name="URL" placeholder="URL" type="url" tabindex="1" required>
               <button class="btn btn-primary ladda-button" data-style="expand-left" tabindex="2"><span class="ladda-label">Submit</span></button>
+            <div id="image" style="display: none;">
+                <a id = "link_im" href="{{ link }}"><img id = "img_src" src="{{ preview_link }}"></a>
+            </div>
             <p class="copyright">Designed by <a href="https://devitconsultancy.com/">DevItC</a><p>
           </form>
         </div>
-        {%if image %}
-          	<a href="{{ link }}"><img src="{{ preview_link }}"></a>
-        {% endif %}
+        
 
 
 {% endblock %}
