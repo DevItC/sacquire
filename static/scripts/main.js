@@ -20,6 +20,11 @@ $('form').submit(function(event) {
     }
   )
   .done((res) => {
+    if (res.media_type=='private') {
+      bootbox.alert("The media entered is private!");
+      l.stop();
+      return false;
+    }
     console.log('Completion check')
     var elem = document.querySelector('#link_im')
     elem.setAttribute("href", res.media_url);
