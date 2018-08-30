@@ -22,6 +22,8 @@ def index2():
 
 @app.route('/enqueue', methods=['POST'])
 def enqueue():
+    fb = facebook.FBAcquire()
+    fb.URL = ''
     args = (request.form['URL'],)
     task = q.enqueue_call(func=facebook.give_links, args=args, result_ttl=5000, timeout=3600)
     

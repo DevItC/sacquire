@@ -1,92 +1,89 @@
+import json
 import os
 import requests
-import json
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 
 
-def get_link(driver):
-	try:
-		elem = driver.find_element_by_xpath("//div[@class='widePic']/div").get_attribute("data-store")
-		link = json.loads(elem)["src"]
-		# driver.get(link)
-		dirname = "videos"
-	except:
-		elem = driver.find_elements_by_class_name("sec")
-		link = elem[1].get_attribute("href")
-		# driver.get(link)
-	dirname = "images"
-	driver.close()
-	title = link.split("?")[0].split("/")[-1]
-	return [title, link]
+class SAcquire:
+    def __init__(self, url=None):
+        self.driver = self.__webdriver()
+        self.__media = None
+        if url:
+            self.URL = url
 
-def download(driver):
-    try:
-        elem = driver.find_element_by_xpath("//div[@class='widePic']/div").get_attribute("data-store")
-        link = json.loads(elem)["src"]
-        # driver.get(link)
-        dirname = "videos"
-    except:
-        elem = driver.find_elements_by_class_name("sec")
-        link = elem[1].get_attribute("href")
-        # driver.get(link)
-        dirname = "images"
-    driver.close()
+    @staticmethod
+    def __webdriver():
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        driver = webdriver.Chrome(options=options)
+        return driver
 
-    res = requests.get(link)
-    res.raise_for_status()
-    title = link.split("?")[0].split("/")[-1]
-    
-    if not os.path.isdir(dirname):
-        os.makedirs(dirname)
-        
-    with open(os.path.join(dirname, title), "wb") as file:
-        for chunk in res.iter_content(100000):
-            file.write(chunk)
+    @property
+    def URL(self):
+        return self.__url
 
-    return os.path.join(dirname, title)
+    @URL.setter
+    def URL(self, value):
+        self.data = self.process(value)
+        self.__url = value
 
-def get_preview(driver):
-	try:
-		elem = driver.find_element_by_xpath("//div[@class='widePic']/div/i").get_attribute("style")
-		url_type = "video"
-	except:
-		url_type = "image"
-		elements = driver.find_elements_by_xpath("//div[@id='page']//i")
-		if (len(elements)==0):
-			return ['private', None]
-		elem=elements[2].get_attribute('style')
+    @property
+    def media(self):
+        if self.data['media_type'] == 'private':
+            return 'Can not download private media!'
+        if not self.__media:
+            self.__download()
+        return self.__media
 
-	# print (elem)
-	# print ()
-	url = elem.split("\"")[1]
-	return [url_type, url]
+    def __download(self):
+        res = requests.get(self.data['media_url'])
+        res.raise_for_status()
+
+        dirname = self.data['media_type']
+        if not os.path.isdir(dirname):
+            os.makedirs(dirname)
+        with open(os.path.join(dirname, self.data['media_title']), 'wb') as file:
+            for chunk in res.iter_content(100000):
+                file.write(chunk)
+        self.__media = os.path.join(dirname, self.data['title'])
 
 
-def open_link(url):
-	options = webdriver.ChromeOptions()
-	options.add_argument("headless")
-	options.add_argument('--no-sandbox')
-	driver = webdriver.Chrome()
-	url = "m".join(url.split("www"))
-	driver.get(url)
-	return driver
-	
-def give_links(url):
-	driver = open_link(url)
-	preview = get_preview(driver)
-	link = get_link(driver)
-	return [preview, link]
+class FBAcquire(SAcquire):
+    def process(self, url):
+        url = 'm'.join(url.split('www'))
+        self.driver.get(url)
+        data = {}
+        try:
+            data['media_type'] = self.driver.find_element_by_xpath('//meta[@property="og:type"]').get_property('content')
+            data['media_preview'] = self.driver.find_element_by_xpath('//meta[@property="og:image"]').get_property(
+                'content')
+            data['media_url'] = self.driver.find_element_by_xpath('//meta[@property="og:video"]').get_property('content')
+        except NoSuchElementException:
+            try:
+                data['media_preview'] = self.driver.find_elements_by_xpath('//div[@id="page"]//i')[2].get_attribute('style').split('"')[1]
+            except IndexError:
+                data['media_type'] = 'private'
+                return data
+            data['media_type'] = 'image'
+            data['media_url'] = self.driver.find_element_by_xpath('//meta[@property="og:image"]').get_property(
+                'content')
+
+        data['media_title'] = self.driver.find_element_by_xpath('//meta[@property="og:title"]').get_property('content')
+        return data
+
 
 def main():
-    url = input("[*] Enter file URL: ")
+    url = input('[*] Enter file URL: ')
     driver = open_link(url)
-    
+
     preview = get_preview(driver)
-    print (preview)
+    print(preview)
     link = get_link(driver)
-    print (link)
+    print(link)
     # print("[*] File saved as {}".format(filename))
-    print (link)
+    print(link)
 
 
 if __name__ == "__main__":
