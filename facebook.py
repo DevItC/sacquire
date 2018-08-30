@@ -29,6 +29,10 @@ class SAcquire:
         self.data = self.process(value)
         self.__url = value
 
+    def setURL(self, value):
+        self.URL = value
+        return self.data
+
     @property
     def media(self):
         if self.data['media_type'] == 'private':

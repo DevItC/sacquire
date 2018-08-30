@@ -38,11 +38,11 @@ function getStatus(taskID) {
     if (taskStatus === 'finished' || taskStatus === 'failed') {
       console.log('Completion check')
       var elem = document.querySelector('#link_im')
-      elem.setAttribute("href", res.data.link);
+      elem.setAttribute("href", res.data.media_url);
       elem = document.querySelector('#img_src')
-      elem.setAttribute("src", res.data.preview_link);
+      elem.setAttribute("src", res.data.media_preview);
       
-      // elem.innerHTML.innerHTML.src = res.data.preview_link;
+      // elem.innerHTML.innerHTML.src = res.data.media_preview;
       elem = document.querySelector('#image')
       
       elem.style.display = "Block";

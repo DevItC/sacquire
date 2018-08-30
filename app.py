@@ -12,27 +12,29 @@ q = Queue(connection=conn)
 @app.route('/home', methods=['GET'])
 def index():
     # image = request.args.get('image')
-    preview_link = request.args.get('preview_link')
-    link = request.args.get('link')
-    return render_template('form.html', preview_link=preview_link, link=link )
+    media_preview = request.args.get('media_preview')
+    media_url = request.args.get('media_url')
+    return render_template('form.html', media_preview=media_preview, media_url=media_url )
 
 @app.route('/')
 def index2():
-    return redirect(url_for('index', preview_link="", link=""))
+    return redirect(url_for('index', media_preview="", media_url=""))
 
 @app.route('/enqueue', methods=['POST'])
 def enqueue():
+    print("sfasfasfsa")
     fb = facebook.FBAcquire()
-    fb.URL = ''
     args = (request.form['URL'],)
-    task = q.enqueue_call(func=facebook.give_links, args=args, result_ttl=5000, timeout=3600)
-    
+    print(request.form['URL'])
+    task = q.enqueue_call(func=fb.setURL, args=args, result_ttl=5000, timeout=3600) 
+
     response = {
         'status': 'success',
         'data': {
             'task_id': task.get_id()
         }
     }
+    print(response)
     return jsonify(response), 202
 
 
@@ -50,8 +52,8 @@ def get_status(task_id):
         }
         if (status=='finished'):
             result = q.fetch_job(task_id).result
-            response['data']['preview_link'] = result[0][1]
-            response['data']['link'] = result[1][1]
+            response['data']['media_preview'] = result[0][1]
+            response['data']['media_url'] = result[1][1]
     else:
         response = {'status': 'error'}
 
